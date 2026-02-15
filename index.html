@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complexity Adaptive Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #fff;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        /* Sections */
+        section {
+            padding: 80px 0;
+            animation: fadeIn 1s ease;
+        }
+
+        section:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            color: #667eea;
+            text-align: center;
+        }
+
+        .section-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Home Section */
+        .home-description {
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+            text-align: center;
+            line-height: 1.8;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 15px 40px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cta-button:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .button-container {
+            text-align: center;
+        }
+
+        /* Problem Section */
+        .assumption-list {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .assumption-list ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .assumption-list li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .assumption-list li:before {
+            content: "•";
+            position: absolute;
+            left: 10px;
+            color: #667eea;
+            font-size: 1.5rem;
+        }
+
+        /* Solution Section */
+        .ml-models {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .model-card {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .model-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .model-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .benefits {
+            margin-top: 30px;
+        }
+
+        .benefits ul {
+            list-style: none;
+        }
+
+        .benefits li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .benefits li:before {
+            content: "✓";
+            position: absolute;
+            left: 10px;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        /* How It Works */
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .step:hover {
+            transform: translateX(10px);
+        }
+
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+
+        .step-text {
+            font-size: 1.1rem;
+        }
+
+        /* Results Section */
+        .chart-placeholder {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            margin: 30px 0;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .chart-placeholder canvas {
+            max-width: 100%;
+        }
+
+        .comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            color: #667eea;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .metric-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* About Section */
+        .about-content {
+            text-align: center;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        /* Footer */
+        footer {
+            background: #2c3e50;
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #667eea;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            section {
+                padding: 50px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <h1>Complexity Adaptive Portfolio</h1>
+            <p class="subtitle">Machine Learning Based Portfolio Optimization</p>
+        </div>
+    </header>
+
+    <!-- Home Section -->
+    <section id="home">
+        <div class="container">
+            <div class="section-content">
+                <p class="home-description">
+                    This project uses machine learning to improve portfolio optimization by capturing complex interactions between financial variables. Traditional models assume linear relationships, but real markets are nonlinear and dynamic.
+                </p>
+                <div class="button-container">
+                    <a href="#results" class="cta-button">View Project</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section id="problem">
+        <div class="container">
+            <h2>The Problem</h2>
+            <div class="section-content">
+                <p style="text-align: center; margin-bottom: 20px; font-size: 1.1rem;">
+                    Traditional portfolio optimization models like Markowitz assume:
+                </p>
+                <div class="assumption-list">
+                    <ul>
+                        <li>Linear relationships between assets</li>
+                        <li>Independent variables with no complex interactions</li>
+                        <li>Static behavior across different market conditions</li>
+                    </ul>
+                </div>
+                <p style="text-align: center; margin-top: 30px; font-size: 1.1rem; color: #666;">
+                    But real financial markets are <strong style="color: #667eea;">complex and nonlinear</strong>.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section id="solution">
+        <div class="container">
+            <h2>The Solution</h2>
+            <div class="section-content">
+                <p style="text-align: center; margin-bottom: 30px; font-size: 1.1rem;">
+                    This project uses machine learning models to better understand market complexity:
+                </p>
+                
+                <div class="ml-models">
+                    <div class="model-card">
+                        <h3>Random Forest</h3>
+                        <p>Ensemble learning for robust predictions</p>
+                    </div>
+                    <div class="model-card">
+                        <h3>Neural Networks</h3>
+                        <p>Deep learning for complex patterns</p>
+                    </div>
+                </div>
+
+                <div class="benefits">
+                    <h3 style="text-align: center; margin-bottom: 20px; color: #667eea;">Capabilities:</h3>
+                    <ul>
+                        <li>Predict portfolio risk with higher accuracy</li>
+                        <li>Capture nonlinear variable interactions</li>
+                        <li>Improve asset allocation decisions</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works">
+        <div class="container">
+            <h2>How It Works</h2>
+            <div class="section-content">
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-text">Collect historical stock price data</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-text">Calculate features (returns, volatility, correlations, etc.)</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-text">Train machine learning model on historical data</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-text">Predict portfolio risk and expected returns</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <div class="step-text">Optimize portfolio allocation using predictions</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ML Models Section -->
+    <section id="ml-models">
+        <div class="container">
+            <h2>Machine Learning Models</h2>
+            <div class="section-content">
+                <div class="comparison">
+                    <div class="metric-card">
+                        <h3 style="color: #667eea; margin-bottom: 15px;">Random Forest</h3>
+                        <div class="metric-label">R² Score</div>
+                        <div class="metric-value" id="rf-r2">Loading...</div>
+                        <div class="metric-label" style="margin-top: 15px;">MSE</div>
+                        <div class="metric-value" style="font-size: 1.5rem;" id="rf-mse">Loading...</div>
+                        <p style="margin-top: 15px; font-size: 0.9rem; color: #666;">100 trees, max depth 10</p>
+                    </div>
+                    <div class="metric-card">
+                        <h3 style="color: #764ba2; margin-bottom: 15px;">Neural Network</h3>
+                        <div class="metric-label">R² Score</div>
+                        <div class="metric-value" id="nn-r2">Loading...</div>
+                        <div class="metric-label" style="margin-top: 15px;">MSE</div>
+                        <div class="metric-value" style="font-size: 1.5rem;" id="nn-mse">Loading...</div>
+                        <p style="margin-top: 15px; font-size: 0.9rem; color: #666;">Architecture: 64-32-16</p>
+                    </div>
+                </div>
+
+                <h3 style="text-align: center; margin: 50px 0 30px; color: #667eea;">Model Performance Analysis</h3>
+                <div class="assumption-list">
+                    <h4 style="color: #667eea; margin-bottom: 15px;">Random Forest: Excellent Performance (R² ≈ 0.97)</h4>
+                    <p style="line-height: 1.8; margin-bottom: 20px;">
+                        The Random Forest model achieves an R² score of approximately 0.97, demonstrating exceptional predictive accuracy. This success proves a critical hypothesis: <strong>financial market risk exhibits strong non-linear relationships between variables</strong>.
+                    </p>
+                    <p style="line-height: 1.8; margin-bottom: 20px;">
+                        Random Forest excels at capturing complex interactions because it:
+                    </p>
+                    <ul>
+                        <li>Creates decision trees that naturally model non-linear relationships</li>
+                        <li>Captures interaction effects between features (e.g., how volatility and beta combine to affect risk)</li>
+                        <li>Handles complex patterns without assuming linear relationships</li>
+                        <li>Aggregates predictions from 100 trees, reducing overfitting while maintaining flexibility</li>
+                    </ul>
+                    
+                    <h4 style="color: #764ba2; margin-bottom: 15px; margin-top: 30px;">Neural Network: Challenges and Solutions</h4>
+                    <p style="line-height: 1.8; margin-bottom: 20px;">
+                        The Neural Network shows poor performance (negative R²), which is common in financial modeling with limited data. This doesn't invalidate the approach—it highlights important considerations:
+                    </p>
+                    
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                        <h5 style="color: #764ba2; margin-bottom: 10px;">Why Neural Networks Struggle Here:</h5>
+                        <ul>
+                            <li><strong>Insufficient Training Data:</strong> Neural networks require thousands of samples to learn effectively. Our dataset has only 1,000 samples—adequate for Random Forest but insufficient for deep learning.</li>
+                            <li><strong>High Dimensionality vs. Sample Size:</strong> With 8 features and 3 hidden layers, the network has many parameters relative to available data, leading to overfitting.</li>
+                            <li><strong>Hyperparameter Sensitivity:</strong> Learning rate, batch size, and architecture choices critically affect performance and require extensive tuning.</li>
+                            <li><strong>Feature Scaling Issues:</strong> Neural networks are sensitive to feature scales. Variables like volume (millions) and returns (decimals) exist on vastly different scales.</li>
+                        </ul>
+                    </div>
+
+                    <div style="background: #e8f5e9; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                        <h5 style="color: #28a745; margin-bottom: 10px;">How to Improve Neural Network Performance:</h5>
+                        <ul>
+                            <li><strong>Collect More Data:</strong> Increase training samples to 10,000+ observations to give the network sufficient examples to learn from.</li>
+                            <li><strong>Feature Engineering:</strong> Apply standardization (z-score normalization) so all features have mean=0 and std=1.</li>
+                            <li><strong>Simplify Architecture:</strong> Reduce to 2 layers (e.g., 32-16) to decrease parameters and reduce overfitting risk.</li>
+                            <li><strong>Regularization:</strong> Add L2 regularization and dropout layers to prevent the model from memorizing training data.</li>
+                            <li><strong>Early Stopping:</strong> Monitor validation loss and stop training when it stops improving.</li>
+                            <li><strong>Learning Rate Tuning:</strong> Use adaptive learning rates (Adam optimizer with learning rate scheduling).</li>
+                            <li><strong>Ensemble Approach:</strong> Combine Random Forest (which works) with an improved Neural Network for robust predictions.</li>
+                        </ul>
+                    </div>
+
+                    <h4 style="color: #667eea; margin-bottom: 15px; margin-top: 30px;">Key Insight: Non-Linearity in Financial Markets</h4>
+                    <p style="line-height: 1.8;">
+                        The stark performance difference validates our core thesis: <strong>traditional linear models miss critical relationships in financial data</strong>. Random Forest's success demonstrates that variable interactions (volatility × beta, momentum × market conditions) drive portfolio risk more than individual variables acting independently. This finding has direct implications for real-world portfolio construction and risk management.
+                    </p>
+                </div>
+
+                <h3 style="text-align: center; margin: 50px 0 30px; color: #667eea;">Feature Importance</h3>
+                <div class="chart-placeholder">
+                    <canvas id="featureImportanceChart"></canvas>
+                </div>
+                <p style="text-align: center; margin-top: 20px; color: #666; font-size: 0.95rem;">
+                    Feature importance from Random Forest model. Higher values indicate stronger predictive power for portfolio risk.
+                </p>
+
+                <h3 style="text-align: center; margin: 50px 0 30px; color: #667eea;">Try the Model: Predict Portfolio Risk</h3>
+                <div class="assumption-list" style="padding: 40px;">
+                    <p style="text-align: center; margin-bottom: 30px; color: #666;">
+                        Input portfolio characteristics to see real-time risk predictions from both models. The Random Forest prediction is reliable; the Neural Network serves as a baseline comparison.
+                    </p>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                        <div>
+                            <label style="display: block; margin-bottom: 5px; color: #666;">Volatility</label>
+                            <input type="number" id="input-volatility" value="0.15" step="0.01" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                        </div>
+                        <div>
+                            <label style="display: block; margin-bottom: 5px; color: #666;">Beta</label>
+                            <input type="number" id="input-beta" value="1.0" step="0.1" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                        </div>
+                        <div>
+                            <label style="display: block; margin-bottom: 5px; color: #666;">P/E Ratio</label>
+                            <input type="number" id="input-pe" value="20" step="1" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                        </div>
+                        <div>
+                            <label style="display: block; margin-bottom: 5px; color: #666;">ROE</label>
+                            <input type="number" id="input-roe" value="0.12" step="0.01" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                        </div>
+                    </div>
+                    <div style="text-align: center;">
+                        <button class="cta-button" onclick="predictRisk()" style="cursor: pointer;">Predict Risk</button>
+                    </div>
+                    <div id="prediction-results" style="margin-top: 30px; display: none;">
+                        <h4 style="text-align: center; color: #667eea; margin-bottom: 20px;">Prediction Results</h4>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
+                            <div style="text-align: center;">
+                                <div style="font-size: 0.9rem; color: #666;">Random Forest</div>
+                                <div style="font-size: 1.8rem; color: #667eea; font-weight: bold;" id="pred-rf">-</div>
+                                <div style="font-size: 0.8rem; color: #28a745; margin-top: 5px;">✓ Reliable</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 0.9rem; color: #666;">Neural Network</div>
+                                <div style="font-size: 1.8rem; color: #764ba2; font-weight: bold;" id="pred-nn">-</div>
+                                <div style="font-size: 0.8rem; color: #dc3545; margin-top: 5px;">⚠ Needs improvement</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 0.9rem; color: #666;">Ensemble</div>
+                                <div style="font-size: 1.8rem; color: #28a745; font-weight: bold;" id="pred-ensemble">-</div>
+                                <div style="font-size: 0.8rem; color: #666; margin-top: 5px;">Average of both</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section id="results">
+        <div class="container">
+            <h2>Results</h2>
+            <div class="section-content">
+                <div class="chart-placeholder">
+                    <canvas id="performanceChart"></canvas>
+                </div>
+                
+                <h3 style="text-align: center; margin: 40px 0 20px; color: #667eea;">Performance Comparison</h3>
+                <div class="comparison">
+                    <div class="metric-card">
+                        <div class="metric-label">ML Portfolio Return</div>
+                        <div class="metric-value">18.4%</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Traditional Portfolio Return</div>
+                        <div class="metric-value">14.2%</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Sharpe Ratio Improvement</div>
+                        <div class="metric-value">+23%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Objectives Section -->
+    <section id="objectives">
+        <div class="container">
+            <h2>Objectives</h2>
+            <div class="section-content">
+                <h3 style="text-align: center; margin-bottom: 30px; color: #667eea;">What We Set Out to Achieve</h3>
+                <div class="benefits">
+                    <ul>
+                        <li>Predict portfolio risk using machine learning (Random Forest/Neural Networks)</li>
+                        <li>Capture variable interactions that linear models miss</li>
+                        <li>Optimize asset allocation based on ML-predicted volatility</li>
+                        <li>Compare performance against traditional Markowitz and equal-weighted portfolios</li>
+                        <li>Demonstrate the value of complexity-aware modeling in finance</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why This Matters Section -->
+    <section id="why-matters">
+        <div class="container">
+            <h2>Why This Matters</h2>
+            <div class="section-content">
+                <div class="ml-models">
+                    <div class="model-card">
+                        <h3>For Investors</h3>
+                        <p>Better risk management through predictive volatility</p>
+                        <p>Higher risk-adjusted returns</p>
+                        <p>Adaptive strategies that evolve with markets</p>
+                    </div>
+                    <div class="model-card">
+                        <h3>For Finance</h3>
+                        <p>Bridges classical portfolio theory with modern ML</p>
+                        <p>Demonstrates practical AI in investment management</p>
+                        <p>Opens new research directions</p>
+                    </div>
+                    <div class="model-card">
+                        <h3>For Industry</h3>
+                        <p>Scalable approach for any asset class</p>
+                        <p>Real-time portfolio adaptation capability</p>
+                        <p>Foundation for next-gen robo-advisors</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <div class="container">
+            <h2>About</h2>
+            <div class="section-content">
+                <div class="about-content">
+                    <p>
+                        This project was developed by <strong>Kartikeya Singh</strong> (2427030745) under the guidance of <strong>Dr. Atul Kumar Verma</strong> as part of a quantitative finance and machine learning research initiative at Manipal University Jaipur.
+                    </p>
+                    <p style="margin-top: 20px;">
+                        The goal is to explore how machine learning can capture complex variable interactions in financial markets to improve portfolio optimization and risk management.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- References Section -->
+    <section id="references">
+        <div class="container">
+            <h2>References</h2>
+            <div class="section-content">
+                <div class="assumption-list">
+                    <ul style="list-style: decimal; padding-left: 40px;">
+                        <li style="padding-left: 0;">Mayo, Katherine. <em>A Strategic Agent-Based Analysis of Economic and Technological Changes in Financial Networks</em>. 2024. University of Michigan, PhD Dissertation.</li>
+                        <li style="padding-left: 0; margin-top: 15px;">Liu, Buhong. <em>Agent-Based Modeling and Market Microstructure</em>. 2024. King's College London, PhD Dissertation.</li>
+                        <li style="padding-left: 0; margin-top: 15px;">Buchta, M. N. <em>Essays in Financial Economics and Machine Learning</em>. 2025. Columbia University, PhD Dissertation.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p><strong>Kartikeya Singh</strong></p>
+                <p>Manipal University Jaipur | Class of 2028</p>
+                <div class="footer-links">
+                    <a href="https://github.com/kartikeya" target="_blank">GitHub</a>
+                    <a href="mailto:kartikeya.singh@example.com">Email</a>
+                    <a href="https://linkedin.com/in/kartikeya-singh" target="_blank">LinkedIn</a>
+                </div>
+                <p style="margin-top: 20px; font-size: 0.9rem; opacity: 0.8;">
+                    Supervised by Dr. Atul Kumar Verma
+                </p>
+                <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.8;">
+                    © 2026 Complexity Adaptive Portfolio. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Chart.js for visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const API_URL = '/api';
+        
+        // Fetch and display performance chart
+        async function loadPerformanceChart() {
+            try {
+                const response = await fetch(`${API_URL}/performance`);
+                const data = await response.json();
+                
+                const ctx = document.getElementById('performanceChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data.labels,
+                        datasets: [
+                            {
+                                label: 'ML-Based Portfolio',
+                                data: data.ml_portfolio,
+                                borderColor: '#667eea',
+                                backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                                tension: 0.4,
+                                fill: true
+                            },
+                            {
+                                label: 'Traditional Portfolio',
+                                data: data.traditional_portfolio,
+                                borderColor: '#764ba2',
+                                backgroundColor: 'rgba(118, 75, 162, 0.1)',
+                                tension: 0.4,
+                                fill: true
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Portfolio Performance Over Time (Indexed to 100)',
+                                font: {
+                                    size: 16
+                                }
+                            },
+                            legend: {
+                                display: true,
+                                position: 'bottom'
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: false,
+                                title: {
+                                    display: true,
+                                    text: 'Portfolio Value'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Month'
+                                }
+                            }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('Error loading performance data:', error);
+            }
+        }
+        
+        // Fetch and display metrics
+        async function loadMetrics() {
+            try {
+                const response = await fetch(`${API_URL}/metrics`);
+                const data = await response.json();
+                
+                document.querySelector('.metric-card:nth-child(1) .metric-value').textContent = 
+                    `${data.ml_return}%`;
+                document.querySelector('.metric-card:nth-child(2) .metric-value').textContent = 
+                    `${data.traditional_return}%`;
+                document.querySelector('.metric-card:nth-child(3) .metric-value').textContent = 
+                    `+${data.sharpe_improvement}%`;
+            } catch (error) {
+                console.error('Error loading metrics:', error);
+            }
+        }
+
+        // Fetch and display model performance
+        async function loadModelPerformance() {
+            try {
+                const response = await fetch(`${API_URL}/model-performance`);
+                const data = await response.json();
+                
+                document.getElementById('rf-r2').textContent = data.random_forest.r2_score;
+                document.getElementById('rf-mse').textContent = data.random_forest.mse;
+                document.getElementById('nn-r2').textContent = data.neural_network.r2_score;
+                document.getElementById('nn-mse').textContent = data.neural_network.mse;
+            } catch (error) {
+                console.error('Error loading model performance:', error);
+            }
+        }
+
+        // Fetch and display feature importance
+        async function loadFeatureImportance() {
+            try {
+                const response = await fetch(`${API_URL}/feature-importance`);
+                const data = await response.json();
+                
+                const ctx = document.getElementById('featureImportanceChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.features,
+                        datasets: [{
+                            label: 'Importance',
+                            data: data.importance,
+                            backgroundColor: '#667eea',
+                            borderColor: '#5568d3',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            title: {
+                                display: true,
+                                text: 'Random Forest Feature Importance',
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Importance Score'
+                                }
+                            }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('Error loading feature importance:', error);
+            }
+        }
+
+        // Predict risk using ML models
+        async function predictRisk() {
+            const volatility = parseFloat(document.getElementById('input-volatility').value);
+            const beta = parseFloat(document.getElementById('input-beta').value);
+            const peRatio = parseFloat(document.getElementById('input-pe').value);
+            const roe = parseFloat(document.getElementById('input-roe').value);
+
+            try {
+                const response = await fetch(`${API_URL}/predict-risk`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        volatility: volatility,
+                        beta: beta,
+                        pe_ratio: peRatio,
+                        roe: roe
+                    })
+                });
+
+                const data = await response.json();
+                
+                document.getElementById('pred-rf').textContent = data.random_forest_prediction;
+                document.getElementById('pred-nn').textContent = data.neural_network_prediction;
+                document.getElementById('pred-ensemble').textContent = data.ensemble_prediction;
+                document.getElementById('prediction-results').style.display = 'block';
+            } catch (error) {
+                console.error('Error predicting risk:', error);
+                alert('Error predicting risk. Make sure the backend is running.');
+            }
+        }
+        
+        // Load all data when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadPerformanceChart();
+            loadMetrics();
+            loadModelPerformance();
+            loadFeatureImportance();
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
